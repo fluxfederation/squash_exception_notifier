@@ -4,12 +4,12 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'exception_notifier/squash/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "exception-notifier-squash"
+  spec.name          = "exception-notification-squash"
   spec.version       = ExceptionNotifier::Squash::VERSION
   spec.authors       = ["Will Robertson"]
   spec.email         = ["will.robertson@powershop.co.nz"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{Exception Notifier plugin for Squash}
+  #spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
