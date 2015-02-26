@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+
+require 'exception_notifier/squash'
