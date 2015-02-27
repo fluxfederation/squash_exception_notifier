@@ -1,5 +1,5 @@
 module ExceptionNotifier
-  class Squash
+  class SquashNotifier
     VERSION = "0.0.1"
   end
 end

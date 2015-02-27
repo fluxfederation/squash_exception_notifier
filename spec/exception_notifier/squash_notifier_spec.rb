@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe ExceptionNotifier::Squash do
+describe ExceptionNotifier::SquashNotifier do
   it 'has a version number' do
-    expect(ExceptionNotifier::Squash::VERSION).not_to be nil
+    expect(ExceptionNotifier::SquashNotifier::VERSION).not_to be nil
   end
 
   it 'does something useful' do

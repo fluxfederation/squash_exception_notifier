@@ -1,8 +1,11 @@
-require "exception_notifier/squash/version"
+require "exception_notifier/squash_notifier/version"
+
+require "active_support/core_ext/module/attribute_accessors"
+require "exception_notifier"
 require "squash/ruby"
 
 module ExceptionNotifier
-  class Squash ##<Struct.new()
+  class SquashNotifier ##<Struct.new()
     @@whitelisted_env_vars = [
       'action_dispatch.request.parameters',
       'action_dispatch.request.path_parameters',

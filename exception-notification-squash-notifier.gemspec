@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'exception_notifier/squash/version'
+require 'exception_notifier/squash_notifier/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "exception-notification-squash"
-  spec.version       = ExceptionNotifier::Squash::VERSION
+  spec.name          = "exception-notification-squash-notifier"
+  spec.version       = ExceptionNotifier::SquashNotifier::VERSION
   spec.authors       = ["Will Robertson"]
   spec.email         = ["will.robertson@powershop.co.nz"]
   spec.summary       = %q{Exception Notifier plugin for Squash}
@@ -23,5 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "pry-byebug"
 
-  spec.add_runtime_dependency "squash_ruby"
+  spec.add_dependency "activesupport", ">= 3.0.4"
+  spec.add_dependency "exception_notification", ">= 4.0.1"
+  spec.add_dependency "squash_ruby"
 end
