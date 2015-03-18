@@ -22,8 +22,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "pry-byebug"
+  spec.add_development_dependency "simplecov"  #, :require => false, :group => :test
 
   spec.add_dependency "activesupport", ">= 3.0.4"
-  spec.add_dependency "exception_notification", ">= 4.0.1"
+  #TODO(willjr): Restore when using the uploaded Gem, instead:
+  #spec.add_dependency "exception_notification", "~> 4.0.1"
   spec.add_dependency "squash_ruby"
 end
