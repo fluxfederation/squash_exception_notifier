@@ -1,11 +1,19 @@
-require "exception_notifier/squash_notifier/version"
-
 require "active_support/core_ext/module/attribute_accessors"
+require "squash_ruby"
 require "exception_notifier"
-require "squash/ruby"
+
+    # def self.environment_data
+    #   {
+    #       'pid'       => Process.pid,
+    #       'hostname'  => Socket.gethostname,
+    #       'env_vars'  => ENV.inject({}) { |hsh, (k, v)| hsh[k.to_s] = valueify(v); hsh },
+    #       'arguments' => ARGV.join(' ')
+    #   }
+    # end
+
 
 module ExceptionNotifier
-  class SquashNotifier ##<Struct.new()
+  class SquashNotifier
     @@whitelisted_env_vars = [
       'action_dispatch.request.parameters',
       'action_dispatch.request.path_parameters',
@@ -45,8 +53,10 @@ module ExceptionNotifier
     cattr_accessor :whitelisted_env_vars
 
     def self.default_options
-      { api_host: "localhost",
-        environment: self.rails_env }
+      {
+        api_host: "localhost",
+        environment: self.rails_env
+      }
     end
 
     def self.rails_env
@@ -58,15 +68,11 @@ module ExceptionNotifier
       end
     end
 
+    #####
+
     def initialize(options)
       Squash::Ruby.configure default_options(options)
       #super(*options.reverse_merge(self.class.default_options).values_at())
-    end
-
-    def options
-      @options ||= {}.tap do |opts|
-        each_pair { |k,v| opts[k] = v }
-      end
     end
 
     def call(exception, options={})
@@ -92,3 +98,5 @@ module ExceptionNotifier
     end
   end
 end
+
+require "exception_notifier/squash_notifier/version"
