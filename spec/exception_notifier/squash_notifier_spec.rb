@@ -51,17 +51,35 @@ describe ExceptionNotifier::SquashNotifier do
         expect(ExceptionNotifier::SquashNotifier::VERSION).not_to be_nil
       end
 
-      it "should have the same whitelist at class and instance level" do
-        #NB: Need to use #class_eval, as the underlying is dynamically extended
-        expect(squash_notifier.whitelisted_env_vars).to eq(ExceptionNotifier::SquashNotifier.class_eval { self.whitelisted_env_vars })
-      end
-
       it "notifies Squash of an exception" do
         begin
           1/0
         rescue => e
           expect(squash_ruby).to receive(:notify).with(e, {})
           ExceptionNotifier.notify_exception(e, {})
+        end
+      end
+
+      context "whitelisting" do
+        it "should be the same at class and instance level" do
+          #NB: Need to use #class_eval, as the underlying is dynamically extended
+          expect(squash_notifier.whitelisted_env_vars).to eq(ExceptionNotifier::SquashNotifier.class_eval { self.whitelisted_env_vars })
+        end
+
+        context "with faked ENV" do
+          around do |eg|
+            ENV["NOSUCHVAR"] = "Test"
+            eg.run
+            ENV.delete("NOSUCHVAR")
+          end
+
+          it do
+            expect(Squash::Ruby.class_eval { environment_data['env_vars'] }).to include("HOME" => String)
+          end
+
+          it do
+            expect(Squash::Ruby.class_eval { environment_data['env_vars'] }).not_to include("NOSUCHVAR" => "Test")
+          end
         end
       end
     end
