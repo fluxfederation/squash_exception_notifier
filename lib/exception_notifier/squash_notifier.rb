@@ -1,16 +1,7 @@
 require "active_support/core_ext/module/attribute_accessors"
-require "squash_ruby"
 require "exception_notifier"
 
-    # def self.environment_data
-    #   {
-    #       'pid'       => Process.pid,
-    #       'hostname'  => Socket.gethostname,
-    #       'env_vars'  => ENV.inject({}) { |hsh, (k, v)| hsh[k.to_s] = valueify(v); hsh },
-    #       'arguments' => ARGV.join(' ')
-    #   }
-    # end
-
+require "exception_notifier/squash_ruby"
 
 module ExceptionNotifier
   class SquashNotifier
@@ -53,9 +44,23 @@ module ExceptionNotifier
     cattr_accessor :whitelisted_env_vars
 
     def self.default_options
+      # Remove any entries from the 'env' var that are not in the 'whitelisted_env_var' list
+      whitelist_env = lambda do |env|
+        env.select do |key, val|
+          #NB: we want to close-over `self` so we can access the class var
+          #NB:
+          # - When `allowed` is a Regexp, === is like ((a =~ b) ? true : false)
+          # - When `allowed` is a String, === is like (a == b.to_str)
+          # - When `allowed` is a Symbol, === is (a == b)
+          self.whitelisted_env_vars.any? {|allowed|  allowed === key }
+          # self.whitelisted_env_vars.any? {|allowed| (allowed.is_a? Regexp) ? key =~ allowed : key == allowed }
+        end
+      end
+
       {
         api_host: "localhost",
-        environment: self.rails_env
+        environment: self.rails_env,
+        filter_env_vars: whitelist_env
       }
     end
 
@@ -85,16 +90,10 @@ module ExceptionNotifier
 
     def default_options(options)
       # We want to add a `disabled` key if no `api_key` is provided:
-      self.class.default_options.merge(disabled: !options[:api_key]).merge(options)
-    end
-
-    private
-
-    # Remove any entries from the 'env' var that are not in the 'whitelisted_env_var' list
-    def whitelist_env(env)
-      env.select do |key, val|
-        whitelisted_env_vars.any? {|allowed| (allowed.is_a? Regexp) ? key =~ allowed : key == allowed }
-      end
+      calculated_options = {
+        disabled: !options[:api_key],
+      }
+      self.class.default_options.merge(calculated_options).merge(options)
     end
   end
 end
