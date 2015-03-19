@@ -15,7 +15,7 @@ describe Squash::Ruby do
         Squash::Ruby.configure(filter_env_vars: nil)
       end
 
-      it do
+      it "should return prefaced keys and val's for ENV" do
         Squash::Ruby.class_eval { environment_data['env_vars'] }.each do |k, v|
           expect(k).to match(/^#{@key_prefix}/),
             "expected ENV[#{k}].key to start with #{@key_prefix.inspect}"
