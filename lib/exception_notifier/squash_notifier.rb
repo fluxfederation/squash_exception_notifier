@@ -1,3 +1,5 @@
+require "exception_notifier/squash_notifier/version"
+
 require "active_support/core_ext/module/attribute_accessors"
 require "exception_notifier"
 
@@ -44,8 +46,16 @@ module ExceptionNotifier
     cattr_accessor :whitelisted_env_vars
 
     def self.default_options
+      {
+        api_host: "localhost",
+        environment: self.rails_env,
+        filter_env_vars: self.whitelist_env_filter
+      }
+    end
+
+    def self.whitelist_env_filter
       # Remove any entries from the 'env' var that are not in the 'whitelisted_env_var' list
-      whitelist_env = lambda do |env|
+      lambda do |env|
         env.select do |key, val|
           #NB: we want to close-over `self` so we can access the class var
           #NB:
@@ -56,16 +66,9 @@ module ExceptionNotifier
           # self.whitelisted_env_vars.any? {|allowed| (allowed.is_a? Regexp) ? key =~ allowed : key == allowed }
         end
       end
-
-      {
-        api_host: "localhost",
-        environment: self.rails_env,
-        filter_env_vars: whitelist_env
-      }
     end
 
     def self.rails_env
-      #TODO(willjr): I don't believe I have to check `defined? Rails`
       if defined? Rails.env
         Rails.env
       else
@@ -97,5 +100,3 @@ module ExceptionNotifier
     end
   end
 end
-
-require "exception_notifier/squash_notifier/version"
