@@ -29,9 +29,12 @@ describe ExceptionNotifier::SquashNotifier do
 
     describe "created directly" do
       it "can create a SquashNotifier from a const" do
-        expect(squash_ruby).to receive(:configure).with(@squash_config_options.merge(disabled: false))
+        expect(squash_ruby).to receive(:configure).with(
+          @squash_config_options.merge(disabled: false, filter_env_vars: duck_type(:call))
+        )
         expect(ExceptionNotifier::SquashNotifier.new(@squash_config_options)).to be_an ExceptionNotifier::SquashNotifier
       end
+
     end
 
     describe "created via ExceptionNotifier" do
@@ -40,11 +43,17 @@ describe ExceptionNotifier::SquashNotifier do
         eg.run
         ExceptionNotification.configure {|c| c.unregister_exception_notifier :squash }
       end
+      let(:squash_notifier) { ExceptionNotifier.registered_exception_notifier(:squash) }
 
       #Time.stubs(:current).returns('Sat, 20 Apr 2013 20:58:55 UTC +00:00')
 
       it "has a version number" do
         expect(ExceptionNotifier::SquashNotifier::VERSION).not_to be_nil
+      end
+
+      it "should have the same whitelist at class and instance level" do
+        #NB: Need to use #class_eval, as the underlying is dynamically extended
+        expect(squash_notifier.whitelisted_env_vars).to eq(ExceptionNotifier::SquashNotifier.class_eval { self.whitelisted_env_vars })
       end
 
       it "notifies Squash of an exception" do
