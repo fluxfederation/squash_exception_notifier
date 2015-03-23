@@ -4,4 +4,4 @@ source 'https://rubygems.org'
 gemspec
 
 #TODO(willjr): Remove when using the uploaded Gem, instead:
-gem 'exception_notification', '~> 4.0.2.ps.5', path: '~/dev/devops/squash/exception_notification'
+gem 'exception_notification', '~> 4.0.1.1', path: '~/dev/devops/squash/exception_notification'
