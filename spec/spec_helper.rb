@@ -3,6 +3,8 @@ SimpleCov.start do
   add_filter "/.bundle/"
 end
 
+require 'pry'
+
 #####
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
