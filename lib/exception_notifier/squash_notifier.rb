@@ -65,7 +65,6 @@ module ExceptionNotifier
           # - When `allowed` is a String, === is like (a == b.to_str)
           # - When `allowed` is a Symbol, === is (a == b)
           self.whitelisted_env_vars.any? {|allowed|  allowed === key }
-          # self.whitelisted_env_vars.any? {|allowed| (allowed.is_a? Regexp) ? key =~ allowed : key == allowed }
         end
       end
     end
@@ -75,7 +74,6 @@ module ExceptionNotifier
     def initialize(options)
       Squash::Ruby.configure default_options.merge(options)
       Squash::Ruby.configure disabled: !Squash::Ruby.configuration(:api_key)
-      #super(*options.reverse_merge(self.class.default_options).values_at())
     end
 
     def call(exception, options={})
