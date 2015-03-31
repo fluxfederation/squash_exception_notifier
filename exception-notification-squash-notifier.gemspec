@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'exception_notifier/squash_notifier/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "exception-notification-squash-notifier"
+  spec.name          = "exception_notification-squash_notifier"
   spec.version       = ExceptionNotifier::SquashNotifier::VERSION
   spec.authors       = ["Will Robertson"]
   spec.email         = ["will.robertson@powershop.co.nz"]
