@@ -47,10 +47,12 @@ module ExceptionNotifier
 
     def self.default_options
       {
-        api_host: "localhost",
-        environment: self.rails_env,
         filter_env_vars: self.whitelist_env_filter
       }
+    end
+
+    def default_options
+      self.class.default_options
     end
 
     def self.whitelist_env_filter
@@ -68,35 +70,17 @@ module ExceptionNotifier
       end
     end
 
-    def self.rails_env
-      if defined? Rails.env
-        Rails.env
-      else
-        ENV['RAILS_ENV'] || ENV['RACK_ENV']
-      end
-    end
-
     #####
 
     def initialize(options)
-      Squash::Ruby.configure default_options(options)
+      Squash::Ruby.configure default_options.merge(options)
+      Squash::Ruby.configure disabled: !Squash::Ruby.configuration(:api_key)
       #super(*options.reverse_merge(self.class.default_options).values_at())
     end
 
     def call(exception, options={})
       #NB: You can pass a `user_data` hash to #notify, and most attr's will be placed into a `user_data` field
       Squash::Ruby.notify(exception, options)
-      #create_email(exception, options).deliver
-    end
-
-    protected
-
-    def default_options(options)
-      # We want to add a `disabled` key if no `api_key` is provided:
-      calculated_options = {
-        disabled: !options[:api_key],
-      }
-      self.class.default_options.merge(calculated_options).merge(options)
     end
   end
 end

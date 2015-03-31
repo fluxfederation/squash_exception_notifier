@@ -30,8 +30,10 @@ describe ExceptionNotifier::SquashNotifier do
     describe "created directly" do
       it "can create a SquashNotifier from a const" do
         expect(squash_ruby).to receive(:configure).with(
-          @squash_config_options.merge(disabled: false, filter_env_vars: duck_type(:call))
+          @squash_config_options.merge(filter_env_vars: duck_type(:call))
         )
+        expect(squash_ruby).to receive(:configuration).with(:api_key).and_return(true)
+        expect(squash_ruby).to receive(:configure).with(disabled: false)
         expect(ExceptionNotifier::SquashNotifier.new(@squash_config_options)).to be_an ExceptionNotifier::SquashNotifier
       end
 
@@ -79,49 +81,6 @@ describe ExceptionNotifier::SquashNotifier do
 
           it do
             expect(Squash::Ruby.class_eval { environment_data['env_vars'] }).not_to include("NOSUCHVAR" => "Test")
-          end
-        end
-      end
-
-      context "for Rails env" do
-        context "when Rails.env is set" do
-          let(:rails_rails_env) { class_double("Rails").as_stubbed_const(:transfer_nested_constants => true) }
-
-          around(:all) do |eg|
-            class Rails
-              def self.env; true; end
-            end
-            eg.run
-            Object.send(:remove_const, :Rails)
-          end
-
-          it do
-            expect(rails_rails_env).to receive(:env).with(no_args).and_return("Rails.env set")
-            expect(ExceptionNotifier::SquashNotifier.rails_env).to eq("Rails.env set")
-          end
-        end
-
-        context "when ENV['RAILS_ENV'] is set" do
-          around(:all) do |eg|
-            ENV["RAILS_ENV"] = "RAILS_ENV set"
-            eg.run
-            ENV.delete("RAILS_ENV")
-          end
-
-          it do
-            expect(ExceptionNotifier::SquashNotifier.rails_env).to eq("RAILS_ENV set")
-          end
-        end
-
-        context "when ENV['RACK_ENV'] is set" do
-          around(:all) do |eg|
-            ENV["RACK_ENV"] = "RACK_ENV set"
-            eg.run
-            ENV.delete("RACK_ENV")
-          end
-
-          it do
-            expect(ExceptionNotifier::SquashNotifier.rails_env).to eq("RACK_ENV set")
           end
         end
       end
