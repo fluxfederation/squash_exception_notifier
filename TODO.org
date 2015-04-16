@@ -1,27 +1,2 @@
 * Tasks
-** DOING Whitelist EnvVars
-   :LOGBOOK:
-   - State "DOING"      from "TODO"       [2015-02-26 Thu 17:25]
-   :END:
-** DONE Catch the exception_notifier exception, feed into Squash::Ruby
-   :LOGBOOK:
-   - State "DOING"      from "NEXT"       [2015-02-26 Thu 17:50]
-   - State "DONE"       from "DOING"      [2015-02-26 Thu 17:50]
-   :END:
-** TODO Extract the Rails Env (e.g. session)
-** TODO Extract the Rack session info
-** TODO Auto-load the custom notifier
-** TODO Deal with "deploy" hooks in Squash client
-** DONE Squash config (host, api-key)
-   :LOGBOOK:
-   - State "DOING"      from "TODO"       [2015-02-26 Thu 17:25]
-   - State "DONE"       from "DOING"      [2015-02-26 Thu 17:25]
-   :END:
-   - Probably via the standard process, as you _know_ you're using Squash, right?
-   - Need to apply the API Key, etc
-   - Could possibly do-so via Exception Notifier's config process
-** TODO Extract incoming exception_notifier options into squash-friendly version
-   - [ ] What does the `:env` option mean in the context of Rack middleware?
-   - file:~/dev/devops/squash/exceptionnotifier-squash/lib/exception_notifier/squash.rb::def%20call(exception,%20options%3D{})
-
 * Checklist
