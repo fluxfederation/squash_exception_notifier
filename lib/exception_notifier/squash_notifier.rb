@@ -7,11 +7,9 @@ require "exception_notifier/squash_ruby"
 
 module ExceptionNotifier
   class SquashNotifier
-    @@whitelisted_env_vars = [
-      'action_dispatch.request.parameters',
-      'action_dispatch.request.path_parameters',
-      'action_dispatch.request.query_parameters',
-      'action_dispatch.request.request_parameters',
+    cattr_accessor :whitelisted_env_vars
+    # This accepts RegEx, so to not-whitelist, add an entry of /.*/
+    self.whitelisted_env_vars = [
       'BUNDLE_BIN_PATH',
       'BUNDLE_GEMFILE',
       'CONTENT_LENGTH',
@@ -19,31 +17,14 @@ module ExceptionNotifier
       'DOCUMENT_ROOT',
       'GEM_HOME',
       'HOME',
-      /HTTP_/,
       'ORIGINAL_FULLPATH',
-      'PASSENGER_APP_TYPE',
-      'PASSENGER_ENV',
-      'PASSENGER_RUBY',
-      'PASSENGER_SPAWN_METHOD',
-      'PASSENGER_USER',
       'PATH',
       'PATH_INFO',
       'PWD',
-      'RAILS_ENV',
-      'REMOTE_ADDR',
-      'REMOTE_PORT',
-      'REQUEST_METHOD',
-      'REQUEST_URI',
       'RUBYOPT',
-      'SERVER_ADDR',
-      'SERVER_NAME',
-      'SERVER_PORT',
-      'SERVER_PROTOCOL',
-      'SERVER_SOFTWARE',
       'TMPDIR',
       'USER',
     ]
-    cattr_accessor :whitelisted_env_vars
 
     def self.default_options
       {
@@ -76,9 +57,16 @@ module ExceptionNotifier
       Squash::Ruby.configure disabled: !Squash::Ruby.configuration(:api_key)
     end
 
-    def call(exception, options={})
+    def call(exception, data={})
       #NB: You can pass a `user_data` hash to #notify, and most attr's will be placed into a `user_data` field
-      Squash::Ruby.notify(exception, options)
+      Squash::Ruby.notify(exception, munge_env(data))
+    end
+
+    def munge_env(data)
+      data
     end
   end
 end
+
+# Extend class if you find Rails is being used:
+require 'exception_notifier/squash_notifier/rails'  if defined? Rails

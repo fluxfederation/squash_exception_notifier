@@ -8,6 +8,10 @@ module Squash::Ruby
   class << self
     private
 
+    def client_name
+      'squash'
+    end
+
     alias :environment_data__original :environment_data
 
     def environment_data
@@ -23,3 +27,6 @@ module Squash::Ruby
     end
   end
 end
+
+# Extend class if you find Rails is being used:
+require 'exception_notifier/squash_ruby/rails'  if defined? Rails
