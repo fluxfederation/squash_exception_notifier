@@ -6,11 +6,11 @@ module Squash::Ruby
   # These are supposed to contain lambdas/procs that will filter the contents of these arrays before sending them up to the Squash server
 
   class << self
-    private
-
     def client_name
       'squash-notifier'
     end
+
+    private
 
     alias :environment_data__original :environment_data
 
@@ -27,6 +27,3 @@ module Squash::Ruby
     end
   end
 end
-
-# Extend class if you find Rails is being used:
-require 'exception_notifier/squash_ruby/rails'  if defined? Rails
