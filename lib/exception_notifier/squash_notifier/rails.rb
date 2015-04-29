@@ -2,7 +2,7 @@
 
 require 'pp'
 
-class ExceptionNotifier::SquashNotifier
+class ExceptionNotifier::SquashNotifier::SquashRailsNotifier < ExceptionNotifier::SquashNotifier::SquashRubyNotifier
   self.whitelisted_env_vars += [
     'action_dispatch.request.parameters',
     'action_dispatch.request.path_parameters',
@@ -26,6 +26,12 @@ class ExceptionNotifier::SquashNotifier
     'SERVER_SOFTWARE',
   ]
 
+  def call(exception, data={})
+    super(exception, munge_env(data))
+  end
+
+  protected
+
   def munge_env(data)
     return data unless data.has_key?(:env)
 
@@ -44,8 +50,6 @@ class ExceptionNotifier::SquashNotifier
       rack_env: filtered_env
     ))
   end
-
-  private
 
   def occurence_data(request: nil, session: nil, rack_env: {})
     #TODO: Remove when done:
