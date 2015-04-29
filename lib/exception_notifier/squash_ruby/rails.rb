@@ -9,7 +9,7 @@ module Squash::Ruby
   )
 
   def self.client_name
-    'squash-rails'
+    'squash-notifier-rails'
   end
 
   def self.failsafe_log(tag, message)

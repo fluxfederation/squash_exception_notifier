@@ -9,7 +9,7 @@ module Squash::Ruby
     private
 
     def client_name
-      'squash'
+      'squash-notifier'
     end
 
     alias :environment_data__original :environment_data
