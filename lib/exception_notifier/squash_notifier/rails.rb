@@ -40,18 +40,21 @@ class ExceptionNotifier::SquashNotifier
     data.merge(occurence_data(
       request: request,
       session: parameter_filter.filter(request.session.to_hash),
-      cookies: env['rack.request.cookie_hash'],
+      # cookies: env['rack.request.cookie_hash'],
       rack_env: filtered_env
     ))
   end
 
   private
 
-  def occurence_data(request: nil, session: nil, cookies: {}, rack_env: {})
-    flash_key = defined?(ActionDispatch) ? ActionDispatch::Flash::KEY : 'flash'
+  def occurence_data(request: nil, session: nil, rack_env: {})
+    #TODO: Remove when done:
+    # flash_key = defined?(ActionDispatch) ? ActionDispatch::Flash::KEY : 'flash'
 
     # raw_session_id = request.session['session_id'] || (request.env["rack.session.options"] and request.env["rack.session.options"][:id])
     # session_id = request.ssl? ? "[FILTERED]" : raw_session_id.inspect
+
+    PP.pp session, session_s=""
 
     #NB: If you update this hash, make sure to update TOP_LEVEL_USER_DATA in
     #    squash_ruby/rails.rb
@@ -71,15 +74,15 @@ class ExceptionNotifier::SquashNotifier
       # :controller  ## Rails Controller
       # :action  ## Rails Action
       :params         => request.filtered_parameters,
-      # :session_id     => session_id,
       :session        => session,
-      :flash          => session[flash_key],
-      :cookies        => cookies,
+      # :flash          => session[flash_key],
+      # :cookies        => cookies,
 
       # User Data:
       :host_ip        => request.remote_ip,
       :host_name      => Socket.gethostname,
-      :"rack.env"     => rack_env.to_hash
+      :"rack.env"     => rack_env.to_hash,
+      :"session.to_s" => session_s
     }
   end
 
