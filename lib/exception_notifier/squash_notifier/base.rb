@@ -1,8 +1,12 @@
 module ExceptionNotifier
   class SquashNotifier
-    # Factory class:
+    # Factory class
+
+    cattr_accessor :enable_rails
+    self.enable_rails = true
+
     def self.new(*args, &p)
-      return SquashRailsNotifier.new(*args, &p) if defined? Rails
+      return SquashRailsNotifier.new(*args, &p) if self.enable_rails && defined? Rails
       SquashRubyNotifier.new(*args, &p)
     end
 
