@@ -11,19 +11,7 @@ module ExceptionNotifier
     end
 
     class BaseNotifier
-      cattr_accessor :whitelisted_env_vars
-      # This accepts RegEx, so to not-whitelist, add an entry of /.*/
-      self.whitelisted_env_vars = []
-
-      def self.default_options
-        {
-          filter_env_vars: self.whitelist_env_filter
-        }
-      end
-
-      def default_options
-        self.class.default_options
-      end
+      cattr_accessor :whitelisted_env_vars, :default_options
 
       def self.whitelist_env_filter
         # Remove any entries from the 'env' var that are not in the 'whitelisted_env_var' list
@@ -38,6 +26,13 @@ module ExceptionNotifier
           end
         end
       end
+
+      # This accepts RegEx, so to not-whitelist, add an entry of /.*/
+      self.whitelisted_env_vars = []
+
+      self.default_options = {
+        filter_env_vars: self.whitelist_env_filter
+      }
 
       #####
 
