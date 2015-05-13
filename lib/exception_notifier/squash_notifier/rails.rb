@@ -52,6 +52,8 @@ class ExceptionNotifier::SquashNotifier::SquashRailsNotifier < ExceptionNotifier
   end
 
   def occurence_data(request: nil, session: nil, rack_env: {})
+    fail "No 'request' supplied" unless request
+
     #TODO: Remove when done:
     # flash_key = defined?(ActionDispatch) ? ActionDispatch::Flash::KEY : 'flash'
 
