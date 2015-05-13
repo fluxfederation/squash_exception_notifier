@@ -8,7 +8,7 @@ for cpaturing and forwarding exceptions to SquareSquash/web server
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'exception-notifier-squash-notifier'
+gem 'exception-notifier-squash-notifier', require: 'exception_notifier/squash_notifier'
 ```
 
 And then execute:
