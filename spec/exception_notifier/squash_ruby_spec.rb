@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe Squash::Ruby do
-  pending do
+  it do
+    pending("monkey-patching makes me sad")
     #NB: It may never be possible to make this pass, with Squash::Ruby
     #    monkey-patching style
     expect(Squash::Ruby.client_name).to eq('squash-notifier')
