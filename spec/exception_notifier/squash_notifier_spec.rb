@@ -138,7 +138,9 @@ describe ExceptionNotifier::SquashNotifier::SquashRailsNotifier do
 
       #Time.stubs(:current).returns('Sat, 20 Apr 2013 20:58:55 UTC +00:00')
 
-      it "notifies Squash of an standard exception when no rack-env data supplied" do
+      xit "notifies Squash of an standard exception when no rack-env data supplied" do
+        pending("Providing rack-complete data to the :env option")
+
         begin
           1/0
         rescue => e
@@ -147,12 +149,15 @@ describe ExceptionNotifier::SquashNotifier::SquashRailsNotifier do
         end
       end
 
-      pending "notifies Squash of an Rails exception when rack-env data supplied" do
+      xit "notifies Squash of an Rails exception when rack-env data supplied" do
+        pending("Providing rack-complete data to the :env option")
+
         begin
           1/0
         rescue => e
           expect(squash_ruby).to receive(:configuration).with(:filter_env_vars).and_return(squash_notifier.default_options[:filter_env_vars])
           #expect(squash_ruby).to receive(:notify).with(e, {env: "TEST"}).and_return(nil)
+
           ExceptionNotifier.notify_exception(e, {env: {a: "TEST"}})
         end
       end
