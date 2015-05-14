@@ -6,6 +6,10 @@ module Squash::Ruby
   # These are supposed to contain lambdas/procs that will filter the contents of these arrays before sending them up to the Squash server
 
   class << self
+    def client_name
+      'squash-notifier'
+    end
+
     private
 
     alias :environment_data__original :environment_data

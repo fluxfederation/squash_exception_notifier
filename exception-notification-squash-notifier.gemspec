@@ -25,6 +25,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "simplecov", "~> 0.9"
   spec.add_development_dependency "exception_notification", "~> 4.0"
 
-  spec.add_dependency "activesupport", ">= 3.0.4"
+  spec.add_development_dependency "rails", ">= 3.0"
+
+  spec.add_dependency "activesupport", ">= 3.0"
   spec.add_dependency "squash_ruby", "~> 2.0"
 end
